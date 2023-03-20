@@ -36,37 +36,35 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
   {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
-    }]
+    redirect: '/pod/list'
   },
-
   {
-    path: '/example',
+    path: '/pod',
     component: Layout,
-    redirect: '/example/example',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
+    redirect: '/pod/pods',
+    name: 'Pod',
+    meta: {title: 'pod', icon: 'pod'},
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/example/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'list',
+        name: 'PodList',
+        component: () => import('@/views/pod/index'),
+        meta: {title: 'pods', icon: 'pod'}
+      },
+      {
+        path: 'create',
+        name: 'Pod',
+        component: () => import('@/views/pod/create'),
+        meta: {title: 'createorupdate', icon: 'pod', activeMenu: "/pod/list"},
+        hidden: true
       }
     ]
   },
@@ -155,12 +153,12 @@ export const constantRoutes = [
   // },
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  {path: '*', redirect: '/404', hidden: true}
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({y: 0}),
   routes: constantRoutes
 })
 
