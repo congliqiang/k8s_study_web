@@ -47,6 +47,28 @@ export const constantRoutes = [
     redirect: '/pod/list'
   },
   {
+    path: '/node',
+    component: Layout,
+    redirect: '/node/nodes',
+    name: 'Node',
+    meta: {title: 'node', icon: 'pod'},
+    children: [
+      {
+        path: 'list',
+        name: 'NodeList',
+        component: () => import('@/views/node/index'),
+        meta: {title: 'nodes', icon: 'node'}
+      },
+      {
+        path: 'edit',
+        name: 'Node',
+        component: () => import('@/views/node/edit'),
+        meta: {title: 'editnode', icon: 'node', activeMenu: "/node/list"},
+        hidden: true
+      }
+    ]
+  },
+  {
     path: '/pod',
     component: Layout,
     redirect: '/pod/pods',

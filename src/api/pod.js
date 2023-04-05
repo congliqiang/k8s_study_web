@@ -13,8 +13,12 @@ export function getPodItemOrList(params) {
   let namespace = params.namespace
   let name = params.name
   let keyword = params.keyword
+  let nodeName = params.nodeName
   let url = "/k8s/pod/" + namespace
   let query = []
+  if (nodeName !== undefined && nodeName !== "") {
+    query.push("nodeName=" + nodeName)
+  }
   if (name !== undefined && name !== "") {
     query.push("name=" + name)
   }

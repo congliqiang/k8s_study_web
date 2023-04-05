@@ -47,6 +47,9 @@
         </el-select>
       </el-form-item>
       <pod-networking :net-working="form.netWorking" @netWorkingChange="netWorkingChange"/>
+      <pod-node-scheduling :node-scheduling="form.nodeScheduling"
+                           @nodeSchedulingChange="nodeSchedulingChange"></pod-node-scheduling>
+      <pod-tolerations :tolerations="form.tolerations" @tolerationsChange="tolerationsChange"></pod-tolerations>
       <el-form-item label="volumes">
         <el-row v-for="(item,index) in form.volumes" class="for-item">
           <el-col :span="10" style="padding-right: 5px">
@@ -105,16 +108,19 @@
 <script>
 import CreateContainerDialog from "./components/create-container-dialog";
 import PodNetworking from "@/views/pod/components/pod-networking";
+import PodNodeScheduling from "@/views/pod/components/pod-node-scheduling";
+import PodTolerations from "@/views/pod/components/pod-tolerations";
 import ContainerList from "./components/container"
 import {Message} from 'element-ui'
-import da from "element-ui/src/locale/lang/da";
 
 export default {
   name: "PodCreate",
   components: {
     CreateContainerDialog,
     ContainerList,
-    PodNetworking
+    PodNetworking,
+    PodNodeScheduling,
+    PodTolerations
   },
   data() {
     return {
@@ -145,6 +151,13 @@ export default {
           namespace: ""
         },
         volumes: [],
+        nodeScheduling: {
+          type: "nodeAny",
+          nodeName: "",
+          nodeSelector: [],
+          nodeAffinity: [],
+        },
+        tolerations: [],
         netWorking: {
           hostNetwork: false,
           dnsConfig: {
@@ -184,7 +197,6 @@ export default {
         }
         this.$store.dispatch("pod/getPodItemOrList", params).then(res => {
           // this.form = res.data
-          console.log(res.data)
           this.form = res.data
         })
       }
@@ -229,6 +241,14 @@ export default {
     },
     netWorkingChange(val) {
       this.form.netWorking = val
+    },
+    nodeSchedulingChange(val) {
+      console.log(val)
+      this.form.nodeScheduling = val
+    },
+    tolerationsChange(val) {
+      console.log(val)
+      this.form.tolerations = val
     }
   }
 }

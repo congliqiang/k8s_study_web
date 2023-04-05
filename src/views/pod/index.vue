@@ -110,7 +110,6 @@ export default {
           message: '已取消删除'
         });
       });
-
     },
     editPod(name) {
       this.redirectTo("/pod/create?name=" + name)

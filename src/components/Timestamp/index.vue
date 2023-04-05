@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <span>
     {{ dateTimeFormat(data) }}
-  </div>
+  </span>
 </template>
 
 <script>
@@ -42,7 +42,7 @@ export default {
       const minC = diffValue / minute
       let result = ''
       if (monthC >= 1) {
-        result = '' + parseInt(monthC) + '月前'
+        result = '' + parseInt(1) + '月前'
       } else if (weekC >= 1) {
         result = '' + parseInt(weekC) + '周前'
       } else if (dayC >= 1) {
