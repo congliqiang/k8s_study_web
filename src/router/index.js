@@ -57,7 +57,7 @@ export const constantRoutes = [
         path: 'list',
         name: 'NodeList',
         component: () => import('@/views/node/index'),
-        meta: {title: 'nodes', icon: 'node'}
+        meta: {title: '节点管理', icon: 'node'}
       },
       {
         path: 'edit',
@@ -73,107 +73,58 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/pod/pods',
     name: 'Pod',
-    meta: {title: 'pod', icon: 'pod'},
+    meta: {title: 'pod', icon: 'workload'},
     children: [
       {
         path: 'list',
         name: 'PodList',
         component: () => import('@/views/pod/index'),
-        meta: {title: 'pods', icon: 'pod'}
+        meta: {title: "Pod管理", icon: 'workload'}
       },
       {
         path: 'create',
         name: 'Pod',
         component: () => import('@/views/pod/create'),
-        meta: {title: 'createorupdate', icon: 'pod', activeMenu: "/pod/list"},
+        meta: {title: 'createorupdate', icon: 'workload', activeMenu: "/pod/list"},
         hidden: true
       }
     ]
   },
-
-  // {
-  //   path: '/form',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'Form',
-  //       component: () => import('@/views/form/index'),
-  //       meta: { title: 'Form', icon: 'form' }
-  //     }
-  //   ]
-  // },
-  //
-  // {
-  //   path: '/nested',
-  //   component: Layout,
-  //   redirect: '/nested/menu1',
-  //   name: 'Nested',
-  //   meta: {
-  //     title: 'Nested',
-  //     icon: 'nested'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'menu1',
-  //       component: () => import('@/views/nested/menu1/index'), // Parent router-view
-  //       name: 'Menu1',
-  //       meta: { title: 'Menu1' },
-  //       children: [
-  //         {
-  //           path: 'menu1-1',
-  //           component: () => import('@/views/nested/menu1/menu1-1'),
-  //           name: 'Menu1-1',
-  //           meta: { title: 'Menu1-1' }
-  //         },
-  //         {
-  //           path: 'menu1-2',
-  //           component: () => import('@/views/nested/menu1/menu1-2'),
-  //           name: 'Menu1-2',
-  //           meta: { title: 'Menu1-2' },
-  //           children: [
-  //             {
-  //               path: 'menu1-2-1',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-  //               name: 'Menu1-2-1',
-  //               meta: { title: 'Menu1-2-1' }
-  //             },
-  //             {
-  //               path: 'menu1-2-2',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-  //               name: 'Menu1-2-2',
-  //               meta: { title: 'Menu1-2-2' }
-  //             }
-  //           ]
-  //         },
-  //         {
-  //           path: 'menu1-3',
-  //           component: () => import('@/views/nested/menu1/menu1-3'),
-  //           name: 'Menu1-3',
-  //           meta: { title: 'Menu1-3' }
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: 'menu2',
-  //       component: () => import('@/views/nested/menu2/index'),
-  //       name: 'Menu2',
-  //       meta: { title: 'menu2' }
-  //     }
-  //   ]
-  // },
-  //
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-  //       meta: { title: 'External Link', icon: 'link' }
-  //     }
-  //   ]
-  // },
-
+  {
+    path: '/volume',
+    component: Layout,
+    redirect: '/volume/configmaps',
+    name: 'ConfigMap',
+    meta: {title: '存储卷管理', icon: 'data'},
+    children: [
+      {
+        path: 'configmaps',
+        name: 'ConfigMaps',
+        component: () => import('@/views/configmap/index'),
+        meta: {title: 'ConfigMap', icon: 'cm', activeMenu: "/volume/configmaps"}
+      },
+      {
+        path: 'configmap-edit',
+        name: 'ConfigMapEdit',
+        component: () => import('@/views/configmap/edit'),
+        meta: {title: 'ConfigMap', icon: 'cm', activeMenu: "/volume/configmaps"},
+        hidden: true,
+      },
+      {
+        path: 'secrets',
+        name: 'Secrets',
+        component: () => import('@/views/secret/index'),
+        meta: {title: 'Secret', icon: 'secret', activeMenu: "/volume/secrets"}
+      },
+      {
+        path: 'secret-edit',
+        name: 'SecretEdit',
+        component: () => import('@/views/secret/edit'),
+        meta: {title: 'Secret', icon: 'secret', activeMenu: "/volume/secrets"},
+        hidden: true,
+      },
+    ]
+  },
   // 404 page must be placed at the end !!!
   {path: '*', redirect: '/404', hidden: true}
 ]

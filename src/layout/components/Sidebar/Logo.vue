@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: 'Kube Imooc Dashboard',
+      title: 'KUBE IMOOC 集群可视化',
       logo: 'https://www.imooc.com/static/img/index/logo2020.png'
     }
   }

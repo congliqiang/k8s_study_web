@@ -8,6 +8,8 @@ import example from './modules/example'
 import ns from './modules/namespace'
 import pod from './modules/pod'
 import node from './modules/node'
+import cm from './modules/configmap'
+import secret from './modules/secret'
 
 Vue.use(Vuex)
 
@@ -19,7 +21,9 @@ const store = new Vuex.Store({
     example,
     ns,
     pod,
-    node
+    node,
+    cm,
+    secret
   },
   getters
 })

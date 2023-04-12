@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Kube Imooc Dashboard',
+  title: 'KUBE IMOOC 集群可视化',
 
   /**
    * @type {boolean} true | false

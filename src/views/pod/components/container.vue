@@ -106,14 +106,25 @@
             </el-form-item>
             <el-form-item label-width="120px" label="envs">
               <el-row v-for="(itemEnv,indexEnv) in item.envs" class="for-item">
-                <el-col :span="8" style="padding-right: 6px">
-                  <el-input v-model="itemEnv.key" placeholder="env key"></el-input>
+                <el-col :span="4" style="padding-right: 0.5rem">
+                  <el-input v-model="itemEnv.name" placeholder="env name"></el-input>
                 </el-col>
-                <el-col :span="1" style="text-align: center">-</el-col>
-                <el-col :span="8">
-                  <el-input v-model="itemEnv.value" placeholder="env value"></el-input>
+                <el-col :span="4" style="padding-right: 0.5rem">
+                  <el-select v-model="itemEnv.type">
+                    <el-option value="default"/>
+                    <el-option value="configMap"/>
+                    <el-option value="secret"/>
+                  </el-select>
                 </el-col>
-                <el-col :span="4" style="text-align: center">
+                <el-col v-if="itemEnv.type!=='default'" :span="4" style="padding-right: 0.5rem">
+                  <el-select v-model="itemEnv.refName" placeholder="envRef">
+                    <el-option v-for="(itemEnvRef,_) in envRef[itemEnv.type]" :value="itemEnvRef"></el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="4" style="padding-right: 0.5rem">
+                  <el-input v-model="itemEnv.value" placeholder="env value/refKey"></el-input>
+                </el-col>
+                <el-col :span="2" style="text-align: center">
                   <el-button @click="form.containers[index].envs.splice(indexEnv,1)"
                              size="small"
                              type="danger">
@@ -122,7 +133,40 @@
                   </el-button>
                 </el-col>
               </el-row>
-              <el-button @click="form.containers[index].envs.push({})"
+              <el-button @click="addEnv(index)"
+                         size="mini"
+                         type="primary">
+                add
+                <i class="el-icon-circle-plus"></i>
+              </el-button>
+            </el-form-item>
+            <el-form-item label-width="120px" label="envsFrom">
+              <el-row v-for="(itemEnvFrom,indexEnvFrom) in item.envsFrom" class="for-item">
+                <el-col :span="4" style="padding-right: 0.5rem">
+                  <el-input v-model="itemEnvFrom.prefix" placeholder="envFrom prefix"></el-input>
+                </el-col>
+                <el-col :span="4" style="padding-right: 0.5rem">
+                  <el-select v-model="itemEnvFrom.refType">
+                    <el-option value="configMap"/>
+                    <el-option value="secret"/>
+                  </el-select>
+                </el-col>
+                <el-col :span="4" style="padding-right: 0.5rem">
+                  <el-select v-model="itemEnvFrom.name" placeholder="envRef">
+                    <el-option v-for="(itemEnvFromRef,_) in envRef[itemEnvFrom.refType]"
+                               :value="itemEnvFromRef"></el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="2" style="text-align: center">
+                  <el-button @click="form.containers[index].envsFrom.splice(indexEnv,1)"
+                             size="small"
+                             type="danger">
+                    delete
+                    <i class="el-icon-delete"></i>
+                  </el-button>
+                </el-col>
+              </el-row>
+              <el-button @click="addEnvFrom(index)"
                          size="mini"
                          type="primary">
                 add
@@ -267,6 +311,9 @@ export default {
     }
   },
   name: "Containers",
+  created() {
+    this.loadRef()
+  },
   data() {
     const containersValidator = (rule, value, callback) => {
       //校验容器定义是否为空
@@ -281,6 +328,12 @@ export default {
       activeNames: [],
       form: {
         containers: [],
+      },
+      envRef: {
+        configMap: [],
+        secret: [],
+        configMapKeys: {},
+        secretKeys: {}
       },
       rules: {
         //init-containers 可以不定义
@@ -338,6 +391,7 @@ export default {
         command: [],
         args: [],
         envs: [],
+        envsFrom: [],
         //容器端口
         ports: [],
         volumeMounts: [],
@@ -443,6 +497,69 @@ export default {
         this.form.containers[index].args = []
       }
       this.form.containers[index].args.push('')
+    },
+    addEnv(index) {
+      this.form.containers[index].envs.push({
+        name: "",
+        refName: "",
+        type: "default",
+        value: ""
+      })
+    },
+    addEnvFrom(index) {
+      this.form.containers[index].envsFrom.push({
+        prefix: "",
+        refType: "configMap",
+        name: ""
+      })
+    },
+    loadRef() {
+      //加载configmap
+      this.envRef.configMap = []
+      let params = {
+        namespace: this.$store.state.ns.nsName,
+      }
+      this.$store.dispatch("cm/getCmItemOrList", params).then(res => {
+        let data = res.data
+        for (let i = 0; i < data.length; i++) {
+          this.envRef.configMap.push(data[i].name)
+          //加载keys
+          params.name = data[i].name
+          this.$store.dispatch("cm/getCmItemOrList", params).then(resDetail => {
+            let dataList = resDetail.data.dataList
+            let keys = []
+            for (let j = 0; j < dataList.length; j++) {
+              keys.push(dataList[j].key)
+            }
+            this.$set(this.envRef.configMapKeys, resDetail.data.name, keys)
+          })
+        }
+      })
+      //加载secret
+      let params_secret = {
+        namespace: this.$store.state.ns.nsName,
+      }
+      this.envRef.secret = []
+      this.$store.dispatch("secret/getSecretItemOrList", params_secret).then(res => {
+        let data = res.data
+        for (let i = 0; i < data.length; i++) {
+          this.envRef.secret.push(data[i].name)
+          //加载keys
+          params_secret.name = data[i].name
+          this.$store.dispatch("secret/getSecretItemOrList", params).then(resDetail => {
+            let dataList = resDetail.data.dataList
+            let keys = []
+            for (let j = 0; j < dataList.length; j++) {
+              keys.push(dataList[j].key)
+            }
+            this.$set(this.envRef.secretKeys, resDetail.data.name, keys)
+            console.log(
+              "xxxxxxx"
+            )
+            console.log(this.envRef.secretKeys)
+          })
+        }
+      })
     },
     addCommand(index) {
       if (this.form.containers[index].command == null) {
