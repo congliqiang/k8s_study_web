@@ -29,14 +29,14 @@
         delete
         <i class="el-icon-delete"></i>
       </el-button>
-<!--      <el-col :span="3">-->
-<!--        <el-button @click="tolerations.splice(index,1)"-->
-<!--                   size="small"-->
-<!--                   type="danger">-->
-<!--          delete-->
-<!--          <i class="el-icon-delete"></i>-->
-<!--        </el-button>-->
-<!--      </el-col>-->
+      <!--      <el-col :span="3">-->
+      <!--        <el-button @click="tolerations.splice(index,1)"-->
+      <!--                   size="small"-->
+      <!--                   type="danger">-->
+      <!--          delete-->
+      <!--          <i class="el-icon-delete"></i>-->
+      <!--        </el-button>-->
+      <!--      </el-col>-->
     </el-row>
     <el-button @click="tolerations.push({})"
                size="small"
