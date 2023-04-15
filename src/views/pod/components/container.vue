@@ -546,7 +546,7 @@ export default {
           this.envRef.secret.push(data[i].name)
           //加载keys
           params_secret.name = data[i].name
-          this.$store.dispatch("secret/getSecretItemOrList", params).then(resDetail => {
+          this.$store.dispatch("secret/getSecretItemOrList", params_secret).then(resDetail => {
             let dataList = resDetail.data.dataList
             let keys = []
             for (let j = 0; j < dataList.length; j++) {
