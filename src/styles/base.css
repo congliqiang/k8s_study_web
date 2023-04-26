@@ -25,7 +25,12 @@
 .for-item {
   margin-bottom: 0.5em;
 }
-.intev-line{
+
+.intev-line {
   text-align: center;
   display: inline-block;
+}
+
+.el-inner-item {
+  margin: 1.1rem 0;
 }

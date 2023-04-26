@@ -10,6 +10,9 @@ import pod from './modules/pod'
 import node from './modules/node'
 import cm from './modules/configmap'
 import secret from './modules/secret'
+import pv from './modules/pv'
+import pvc from './modules/pvc'
+import sc from './modules/sc'
 
 Vue.use(Vuex)
 
@@ -23,7 +26,10 @@ const store = new Vuex.Store({
     pod,
     node,
     cm,
-    secret
+    secret,
+    pv,
+    pvc,
+    sc
   },
   getters
 })

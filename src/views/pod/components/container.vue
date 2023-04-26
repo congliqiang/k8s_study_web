@@ -118,7 +118,7 @@
                 </el-col>
                 <el-col v-if="itemEnv.type!=='default'" :span="4" style="padding-right: 0.5rem">
                   <el-select v-model="itemEnv.refName" placeholder="envRef">
-                    <el-option v-for="(itemEnvRef,_) in envRef[itemEnv.type]" :value="itemEnvRef"></el-option>
+                    <el-option v-for="(itemEnvRef,_) in resourceRef[itemEnv.type]" :value="itemEnvRef"></el-option>
                   </el-select>
                 </el-col>
                 <el-col :span="4" style="padding-right: 0.5rem">
@@ -153,7 +153,7 @@
                 </el-col>
                 <el-col :span="4" style="padding-right: 0.5rem">
                   <el-select v-model="itemEnvFrom.name" placeholder="envRef">
-                    <el-option v-for="(itemEnvFromRef,_) in envRef[itemEnvFrom.refType]"
+                    <el-option v-for="(itemEnvFromRef,_) in resourceRef[itemEnvFrom.refType]"
                                :value="itemEnvFromRef"></el-option>
                   </el-select>
                 </el-col>
@@ -279,6 +279,7 @@
 import ContainerProbe from "@/views/pod/components/container-probe";
 import CreateContainerDialog from "@/views/pod/components/create-container-dialog";
 import ContainerResources from "@/views/pod/components/container-resources";
+import da from "element-ui/src/locale/lang/da";
 
 export default {
   components: {
@@ -308,11 +309,15 @@ export default {
     data: {
       type: Array,
       default: () => []
+    },
+    resourceRef: {
+      type: Object,
+      default: () => {
+      }
     }
   },
   name: "Containers",
   created() {
-    this.loadRef()
   },
   data() {
     const containersValidator = (rule, value, callback) => {
@@ -328,12 +333,6 @@ export default {
       activeNames: [],
       form: {
         containers: [],
-      },
-      envRef: {
-        configMap: [],
-        secret: [],
-        configMapKeys: {},
-        secretKeys: {}
       },
       rules: {
         //init-containers 可以不定义
@@ -511,54 +510,6 @@ export default {
         prefix: "",
         refType: "configMap",
         name: ""
-      })
-    },
-    loadRef() {
-      //加载configmap
-      this.envRef.configMap = []
-      let params = {
-        namespace: this.$store.state.ns.nsName,
-      }
-      this.$store.dispatch("cm/getCmItemOrList", params).then(res => {
-        let data = res.data
-        for (let i = 0; i < data.length; i++) {
-          this.envRef.configMap.push(data[i].name)
-          //加载keys
-          params.name = data[i].name
-          this.$store.dispatch("cm/getCmItemOrList", params).then(resDetail => {
-            let dataList = resDetail.data.dataList
-            let keys = []
-            for (let j = 0; j < dataList.length; j++) {
-              keys.push(dataList[j].key)
-            }
-            this.$set(this.envRef.configMapKeys, resDetail.data.name, keys)
-          })
-        }
-      })
-      //加载secret
-      let params_secret = {
-        namespace: this.$store.state.ns.nsName,
-      }
-      this.envRef.secret = []
-      this.$store.dispatch("secret/getSecretItemOrList", params_secret).then(res => {
-        let data = res.data
-        for (let i = 0; i < data.length; i++) {
-          this.envRef.secret.push(data[i].name)
-          //加载keys
-          params_secret.name = data[i].name
-          this.$store.dispatch("secret/getSecretItemOrList", params_secret).then(resDetail => {
-            let dataList = resDetail.data.dataList
-            let keys = []
-            for (let j = 0; j < dataList.length; j++) {
-              keys.push(dataList[j].key)
-            }
-            this.$set(this.envRef.secretKeys, resDetail.data.name, keys)
-            console.log(
-              "xxxxxxx"
-            )
-            console.log(this.envRef.secretKeys)
-          })
-        }
       })
     },
     addCommand(index) {

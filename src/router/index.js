@@ -51,19 +51,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/node/nodes',
     name: 'Node',
-    meta: {title: 'node', icon: 'pod'},
+    meta: {title: '节点管理', icon: 'pod'},
     children: [
       {
         path: 'list',
         name: 'NodeList',
         component: () => import('@/views/node/index'),
-        meta: {title: '节点管理', icon: 'node'}
+        meta: {title: '节点列表', icon: 'node'}
       },
       {
         path: 'edit',
         name: 'Node',
         component: () => import('@/views/node/edit'),
-        meta: {title: 'editnode', icon: 'node', activeMenu: "/node/list"},
+        meta: {title: "编辑节点", icon: 'node', activeMenu: "/node/list"},
         hidden: true
       }
     ]
@@ -73,19 +73,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/pod/pods',
     name: 'Pod',
-    meta: {title: 'pod', icon: 'workload'},
+    meta: {title: 'Pod管理', icon: 'workload'},
     children: [
       {
         path: 'list',
         name: 'PodList',
         component: () => import('@/views/pod/index'),
-        meta: {title: "Pod管理", icon: 'workload'}
+        meta: {title: "Pod列表", icon: 'workload'}
       },
       {
         path: 'create',
         name: 'Pod',
         component: () => import('@/views/pod/create'),
-        meta: {title: 'createorupdate', icon: 'workload', activeMenu: "/pod/list"},
+        meta: {title: '更新Pod', icon: 'workload', activeMenu: "/pod/list"},
         hidden: true
       }
     ]
@@ -121,6 +121,45 @@ export const constantRoutes = [
         name: 'SecretEdit',
         component: () => import('@/views/secret/edit'),
         meta: {title: 'Secret', icon: 'secret', activeMenu: "/volume/secrets"},
+        hidden: true,
+      },
+      {
+        path: 'pvs',
+        name: 'PersistentVolume',
+        component: () => import('@/views/pv/index'),
+        meta: {title: 'PersistentVolume', icon: 'pv', activeMenu: "/volume/pvs"}
+      },
+      {
+        path: 'pv-edit',
+        name: 'PVEdit',
+        component: () => import('@/views/pv/edit'),
+        meta: {title: '编辑PV', icon: 'pv', activeMenu: "/volume/pvs"},
+        hidden: true,
+      },
+      {
+        path: 'pvcs',
+        name: 'PersistentVolumeClaim',
+        component: () => import('@/views/pvc/index'),
+        meta: {title: 'PersistentVolumeClaim', icon: 'pvc', activeMenu: "/volume/pvcs"}
+      },
+      {
+        path: 'pvc-edit',
+        name: 'PVCEdit',
+        component: () => import('@/views/pvc/edit'),
+        meta: {title: '编辑PVC', icon: 'pvc', activeMenu: "/volume/pvcs"},
+        hidden: true,
+      },
+      {
+        path: 'scs',
+        name: 'StorageClass',
+        component: () => import('@/views/sc/index'),
+        meta: {title: 'StorageClass', icon: 'sc', activeMenu: "/volume/scs"}
+      },
+      {
+        path: 'sc-edit',
+        name: 'SCEdit',
+        component: () => import('@/views/sc/edit'),
+        meta: {title: '编辑SC', icon: 'pvc', activeMenu: "/volume/scs"},
         hidden: true,
       },
     ]

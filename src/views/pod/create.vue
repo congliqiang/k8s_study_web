@@ -14,7 +14,7 @@
             <el-input v-model="item.value" placeholder="label value"></el-input>
           </el-col>
           <el-col :span="3" style="text-align: center">
-            <el-button @click="form.base.labels.splice(index,1)"
+            <el-button style="height: 40px" @click="form.base.labels.splice(index,1)"
                        size="small"
                        type="danger">
               delete
@@ -31,7 +31,7 @@
       </el-form-item>
       <el-form-item label="imagePullSecrets" prop="base.imagePullSecrets">
         <el-select multiple placeholder="please select secret" v-model="form.base.imagePullSecrets" style="width: 100%">
-          <el-option v-for="item in imagePullSecrets"
+          <el-option v-for="item in resourceRef['regSecret']"
                      :key="item"
                      :label="item"
                      :value="item">
@@ -50,36 +50,7 @@
       <pod-node-scheduling :node-scheduling="form.nodeScheduling"
                            @nodeSchedulingChange="nodeSchedulingChange"></pod-node-scheduling>
       <pod-tolerations :tolerations="form.tolerations" @tolerationsChange="tolerationsChange"></pod-tolerations>
-      <el-form-item label="volumes">
-        <el-row v-for="(item,index) in form.volumes" class="for-item">
-          <el-col :span="10" style="padding-right: 5px">
-            <el-select v-model="item.type" placeholder="volume type" style="display: block">
-              <el-option v-for="item in define.volumeOpts"
-                         :label="item"
-                         :key="item"
-                         :value="item"></el-option>
-            </el-select>
-          </el-col>
-          <el-col :span="1" style="text-align: center">-</el-col>
-          <el-col :span="10">
-            <el-input v-model="item.name" placeholder="volume name"></el-input>
-          </el-col>
-          <el-col :span="3" style="text-align: center">
-            <el-button @click="form.volumes.splice(index,1)"
-                       size="small"
-                       type="danger">
-              delete
-              <i class="el-icon-delete"></i>
-            </el-button>
-          </el-col>
-        </el-row>
-        <el-button @click.stop="form.volumes.push({})"
-                   size="small"
-                   type="primary">
-          add volume
-          <i class="el-icon-circle-plus"></i>
-        </el-button>
-      </el-form-item>
+      <pod-volume :volumes="form.volumes" :resourceRef="resourceRef" @volumechange="volumesChange"></pod-volume>
       <el-form-item>
         <el-divider/>
       </el-form-item>
@@ -88,12 +59,14 @@
         :base="form.base"
         :volumes="form.volumes"
         :data="form.initContainers"
+        :resourceRef="resourceRef"
         ref="initContainers"
         :define="define"/>
       <container-list
         :label="'containers'"
         :base="form.base"
         :volumes="form.volumes"
+        :resourceRef="resourceRef"
         :data="form.containers"
         ref="containers"
         :define="define"/>
@@ -110,6 +83,7 @@ import CreateContainerDialog from "./components/create-container-dialog";
 import PodNetworking from "@/views/pod/components/pod-networking";
 import PodNodeScheduling from "@/views/pod/components/pod-node-scheduling";
 import PodTolerations from "@/views/pod/components/pod-tolerations";
+import PodVolume from "@/views/pod/components/pod-volume";
 import ContainerList from "./components/container"
 import {Message} from 'element-ui'
 
@@ -120,12 +94,21 @@ export default {
     ContainerList,
     PodNetworking,
     PodNodeScheduling,
-    PodTolerations
+    PodTolerations,
+    PodVolume
   },
   data() {
     return {
       //为true 表示为更新操作 名字禁止修改
       disabled: false,
+      resourceRef: {
+        configMap: [],
+        secret: [],
+        regSecret: [],
+        pvc: [],
+        configMapKeys: {},
+        secretKeys: {}
+      },
       define: {
         volumeOpts: [
           "emptyDir"
@@ -182,6 +165,7 @@ export default {
   },
   created() {
     this.load()
+    this.loadRef()
   },
   methods: {
     load() {
@@ -243,13 +227,74 @@ export default {
       this.form.netWorking = val
     },
     nodeSchedulingChange(val) {
-      console.log(val)
       this.form.nodeScheduling = val
     },
     tolerationsChange(val) {
-      console.log(val)
       this.form.tolerations = val
-    }
+    },
+    volumesChange(val) {
+      this.form.volumes = val
+    },
+    loadRef() {
+      //加载configmap
+      this.resourceRef.configMap = []
+      let params = {
+        namespace: this.$store.state.ns.nsName,
+      }
+      this.$store.dispatch("cm/getCmItemOrList", params).then(res => {
+        let data = res.data
+        for (let i = 0; i < data.length; i++) {
+          this.resourceRef.configMap.push(data[i].name)
+          //加载keys
+          params.name = data[i].name
+          this.$store.dispatch("cm/getCmItemOrList", params).then(resDetail => {
+            let dataList = resDetail.data
+            let keys = []
+            for (let j = 0; j < dataList.length; j++) {
+              keys.push(dataList[j].key)
+            }
+            this.$set(this.resourceRef.configMapKeys, resDetail.data.name, keys)
+          })
+        }
+      })
+      //加载secret
+      let params_secret = {
+        namespace: this.$store.state.ns.nsName,
+      }
+      this.resourceRef.secret = []
+      this.resourceRef.regSecret = []
+      this.$store.dispatch("secret/getSecretItemOrList", params_secret).then(resSecret => {
+        let data_secret = resSecret.data
+        for (let i = 0; i < data_secret.length; i++) {
+          this.resourceRef.secret.push(data_secret[i].name)
+          if (data_secret[i].type === 'kubernetes.io/dockerconfigjson') {
+            this.resourceRef.regSecret.push(data_secret[i].name)
+          }
+          //加载keys
+          params_secret.name = data_secret[i].name
+          this.$store.dispatch("secret/getSecretItemOrList", params_secret).then(resDetail => {
+            let dataList = resDetail.data
+            let keys = []
+            for (let j = 0; j < dataList.length; j++) {
+              keys.push(dataList[j].key)
+            }
+            this.$set(this.resourceRef.secretKeys, resDetail.data.name, keys)
+          })
+        }
+      })
+
+      //加载pvc
+      let params_pvc = {
+        namespace: this.$store.state.ns.nsName,
+      }
+      this.resourceRef.pvc = []
+      this.$store.dispatch("pvc/getPVCList", params_secret).then(resPvc => {
+        let data = resPvc.data
+        for (let i = 0; i < data.length; i++) {
+          this.resourceRef.pvc.push(data[i].name)
+        }
+      })
+    },
   }
 }
 </script>
