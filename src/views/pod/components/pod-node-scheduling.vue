@@ -62,7 +62,7 @@
             </el-button>
           </el-col>
         </el-row>
-        <el-button @click="nodeScheduling.nodeAffinity.push({})"
+        <el-button @click="addNodeAffinity()"
                    size="small"
                    type="primary">
           add term
@@ -102,6 +102,12 @@ export default {
     })
   },
   methods: {
+    addNodeAffinity() {
+      if (this.nodeScheduling.nodeAffinity == null) {
+        this.nodeScheduling.nodeAffinity = []
+      }
+      this.nodeScheduling.nodeAffinity.push({})
+    },
     addNodeSelector() {
       if (this.nodeScheduling.nodeSelector == null) {
         this.nodeScheduling.nodeSelector = []
