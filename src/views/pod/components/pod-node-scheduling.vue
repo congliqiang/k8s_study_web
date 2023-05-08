@@ -51,7 +51,7 @@
             </el-select>
           </el-col>
           <el-col :span="5">
-            <el-input v-model="item.values" placeholder="values"></el-input>
+            <el-input v-model="item.value" placeholder="value"></el-input>
           </el-col>
           <el-col :span="3" style="text-align: center">
             <el-button @click="nodeScheduling.nodeAffinity.splice(index,1)"
