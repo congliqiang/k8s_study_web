@@ -15,7 +15,7 @@ import Layout from '@/layout'
  *                                if not set alwaysShow, when item has more than one children route,
  *                                it will becomes nested mode, otherwise not show the root menu
  * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ * name:'router-name'              the name is used by <keep-alive> (must set!!!)
  * meta : {
     roles: ['admin','editor']    control the page roles (you can set multiple roles)
     title: 'title'               the name show in sidebar and breadcrumb (recommend set)
@@ -164,12 +164,60 @@ export const constantRoutes = [
       },
     ]
   },
+  {
+    path: '/discovery',
+    component: Layout,
+    redirect: '/discovery/services',
+    name: 'Discovery',
+    meta: {title: '服务发现', icon: 'discovery'},
+    children: [
+      {
+        path: 'services',
+        name: 'Services',
+        component: () => import('@/views/svc/index'),
+        meta: {title: 'Service', icon: 'svc', activeMenu: "/discovery/services"}
+      },
+      {
+        path: 'service-edit',
+        name: 'Services',
+        component: () => import('@/views/svc/edit'),
+        meta: {title: 'Service', icon: 'svc', activeMenu: "/discovery/services"},
+        hidden: true
+      },
+      {
+        path: 'ingresses',
+        name: 'Ingress',
+        component: () => import('@/views/ingress/index'),
+        meta: {title: 'Ingress', icon: 'ingress', activeMenu: "/discovery/ingresses"}
+      },
+      {
+        path: 'ingress-edit',
+        name: 'Ingress',
+        component: () => import('@/views/ingress/edit'),
+        meta: {title: 'Ingress', icon: 'ingress', activeMenu: "/discovery/ingresses"},
+        hidden: true
+      },
+      {
+        path: 'ingroutes',
+        name: 'IngRoute',
+        component: () => import('@/views/ingroute/index'),
+        meta: {title: 'IngressRoute', icon: 'ingroute', activeMenu: "/discovery/ingroutes"}
+      },
+      {
+        path: 'ingroute-edit',
+        name: 'IngRoute',
+        component: () => import('@/views/ingroute/edit'),
+        meta: {title: 'IngressRoute', icon: 'ingroute', activeMenu: "/discovery/ingroutes"},
+        hidden: true
+      },
+    ]
+  },
   // 404 page must be placed at the end !!!
   {path: '*', redirect: '/404', hidden: true}
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  // mode: 'history', // require svc support
   scrollBehavior: () => ({y: 0}),
   routes: constantRoutes
 })

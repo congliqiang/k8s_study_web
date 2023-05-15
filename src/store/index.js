@@ -13,7 +13,9 @@ import secret from './modules/secret'
 import pv from './modules/pv'
 import pvc from './modules/pvc'
 import sc from './modules/sc'
-
+import svc from './modules/svc'
+import ingress from './modules/ingress'
+import ingroute from './modules/ingroute'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -29,7 +31,10 @@ const store = new Vuex.Store({
     secret,
     pv,
     pvc,
-    sc
+    sc,
+    svc,
+    ingress,
+    ingroute
   },
   getters
 })
