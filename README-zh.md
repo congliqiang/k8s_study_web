@@ -1,3 +1,8 @@
+# kubeimooc-web开发环境说明
+- node版本：v16.19.1
+- npm版本：8.15.0
+- 编译环境：mac
+- 开发工具：webstorm（编译器没有版本要求，用vscode也可以）
 # vue-admin-template
 
 > 这是一个极简的 vue admin 管理后台。它只包含了 Element UI & axios & iconfont & permission control & lint，这些搭建后台必要的东西。
