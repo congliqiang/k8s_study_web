@@ -1,5 +1,5 @@
 #第一阶段构建
-FROM node:lts as builder
+FROM node:16.19.1 as builder
 WORKDIR /app/kubeimooc-web
 #拷贝源码
 COPY . .
