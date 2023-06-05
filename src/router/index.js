@@ -212,6 +212,80 @@ export const constantRoutes = [
       },
     ]
   },
+  {
+    path: '/workload',
+    component: Layout,
+    redirect: '/workload/deployments',
+    name: 'Discovery',
+    meta: {title: '工作负载管理', icon: 'workload'},
+    children: [
+      {
+        path: 'deployments',
+        name: 'Deployment',
+        component: () => import('@/views/deployment/index'),
+        meta: {title: 'Deployment', icon: 'workload', activeMenu: "/workload/deployments"}
+      },
+      {
+        path: 'deployment-edit',
+        name: 'Deployment',
+        component: () => import('@/views/deployment/edit'),
+        meta: {title: 'Deployment', icon: 'workload', activeMenu: "/workload/deployments"},
+        hidden: true
+      },
+      {
+        path: 'daemonsets',
+        name: 'DaemonSet',
+        component: () => import('@/views/daemonset/index'),
+        meta: {title: 'DaemonSet', icon: 'workload', activeMenu: "/workload/daemonsets"}
+      },
+      {
+        path: 'daemonset-edit',
+        name: 'DaemonSet',
+        component: () => import('@/views/daemonset/edit'),
+        meta: {title: 'DaemonSet', icon: 'workload', activeMenu: "/workload/daemonsets"},
+        hidden: true
+      },
+      {
+        path: 'statefulsets',
+        name: 'StatefulSet',
+        component: () => import('@/views/statefulset/index'),
+        meta: {title: 'StatefulSet', icon: 'workload', activeMenu: "/workload/statefulsets"}
+      },
+      {
+        path: 'statefulset-edit',
+        name: 'StatefulSet',
+        component: () => import('@/views/statefulset/edit'),
+        meta: {title: 'StatefulSet', icon: 'workload', activeMenu: "/workload/statefulsets"},
+        hidden: true
+      },
+      {
+        path: 'jobs',
+        name: 'Job',
+        component: () => import('@/views/job/index'),
+        meta: {title: 'Job', icon: 'workload', activeMenu: "/workload/jobs"}
+      },
+      {
+        path: 'job-edit',
+        name: 'Job',
+        component: () => import('@/views/job/edit'),
+        meta: {title: 'Job', icon: 'workload', activeMenu: "/workload/jobs"},
+        hidden: true
+      },
+      {
+        path: 'cronjobs',
+        name: 'CronJob',
+        component: () => import('@/views/cronjob/index'),
+        meta: {title: 'CronJob', icon: 'workload', activeMenu: "/workload/cronjobs"}
+      },
+      {
+        path: 'cronjob-edit',
+        name: 'CronJob',
+        component: () => import('@/views/cronjob/edit'),
+        meta: {title: 'CronJob', icon: 'workload', activeMenu: "/workload/cronjobs"},
+        hidden: true
+      },
+    ]
+  },
   // 404 page must be placed at the end !!!
   {path: '*', redirect: '/404', hidden: true}
 ]

@@ -16,6 +16,11 @@ import sc from './modules/sc'
 import svc from './modules/svc'
 import ingress from './modules/ingress'
 import ingroute from './modules/ingroute'
+import deployment from './modules/deployment'
+import daemonset from './modules/daemonset'
+import statefulset from './modules/statefulset'
+import job from  './modules/job'
+import cronjob from  './modules/cronjob'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -34,7 +39,12 @@ const store = new Vuex.Store({
     sc,
     svc,
     ingress,
-    ingroute
+    ingroute,
+    deployment,
+    daemonset,
+    statefulset,
+    job,
+    cronjob
   },
   getters
 })
