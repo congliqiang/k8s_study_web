@@ -1,21 +1,34 @@
 import request from '@/utils/request'
-import da from "element-ui/src/locale/lang/da";
 
-export function createStatefulSet(data) {
+
+export function deleteRb(params) {
+  let namespace = params.namespace
+  let name = params.name
+  let url = "/k8s/rb/" + namespace + "/" + name
   return request({
-    url: '/k8s/statefulset',
+    url: url,
+    method: "delete",
+  })
+}
+
+
+export function createRb(data) {
+  return request({
+    url: '/k8s/rb',
     method: 'post',
     data
   })
 }
 
-export function getStatefulSetItemOrList(params) {
+export function getRbDetailOrList(params) {
   let namespace = params.namespace
   let name = params.name
   let keyword = params.keyword
-  let nodeName = params.nodeName
-  let url = "/k8s/statefulset/" + namespace
+  let url = "/k8s/rb"
   let query = []
+  if (namespace !== undefined && namespace !== "") {
+    query.push("namespace=" + namespace)
+  }
   if (name !== undefined && name !== "") {
     query.push("name=" + name)
   }
@@ -31,12 +44,3 @@ export function getStatefulSetItemOrList(params) {
   })
 }
 
-export function deleteStatefulSet(params) {
-  let namespace = params.namespace
-  let name = params.name
-  let url = "/k8s/statefulset/" + namespace + "/" + name
-  return request({
-    url: url,
-    method: "delete",
-  })
-}

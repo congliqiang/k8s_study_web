@@ -14,9 +14,6 @@ export default {
   name: "Timestamp",
   methods: {
     dateTimeFormat(createTime) {
-      if (createTime === 0) {
-        return "--"
-      }
       let createTimestampStr = createTime.toString()
       if (createTimestampStr.length <= 10) {
         createTimestampStr = createTimestampStr + "000"

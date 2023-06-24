@@ -1,19 +1,30 @@
 import request from '@/utils/request'
 
-export function createJob(data) {
+
+export function deleteSa(params) {
+  let namespace = params.namespace
+  let name = params.name
+  let url = "/k8s/sa/" + namespace + "/" + name
   return request({
-    url: '/k8s/job',
+    url: url,
+    method: "delete",
+  })
+}
+
+
+export function createSa(data) {
+  return request({
+    url: '/k8s/sa',
     method: 'post',
     data
   })
 }
 
-export function getJobItemOrList(params) {
+export function getSaList(params) {
   let namespace = params.namespace
   let name = params.name
   let keyword = params.keyword
-  let nodeName = params.nodeName
-  let url = "/k8s/job/" + namespace
+  let url = "/k8s/sa/" + namespace
   let query = []
   if (name !== undefined && name !== "") {
     query.push("name=" + name)
@@ -30,12 +41,3 @@ export function getJobItemOrList(params) {
   })
 }
 
-export function deleteJob(params) {
-  let namespace = params.namespace
-  let name = params.name
-  let url = "/k8s/job/" + namespace + "/" + name
-  return request({
-    url: url,
-    method: "delete",
-  })
-}

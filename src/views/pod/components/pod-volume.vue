@@ -196,6 +196,13 @@ export default {
 </script>
 
 <style scoped>
+.volume-class {
+  padding: 10px;
+  border: 1px solid #eee;
+  margin: 10px 0;
+  border-radius: 10px;
+}
+
 .col-class {
   margin: 5px 0;
 }

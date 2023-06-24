@@ -1,19 +1,34 @@
 import request from '@/utils/request'
 
-export function createCronJob(data) {
+
+export function deleteRole(params) {
+  let namespace = params.namespace
+  let name = params.name
+  let url = "/k8s/role/" + namespace + "/" + name
   return request({
-    url: '/k8s/cronjob',
+    url: url,
+    method: "delete",
+  })
+}
+
+
+export function createRole(data) {
+  return request({
+    url: '/k8s/role',
     method: 'post',
     data
   })
 }
 
-export function getCronJobItemOrList(params) {
+export function getRoleDetailOrList(params) {
   let namespace = params.namespace
   let name = params.name
   let keyword = params.keyword
-  let url = "/k8s/cronjob/" + namespace
+  let url = "/k8s/role"
   let query = []
+  if (namespace !== undefined && namespace !== "") {
+    query.push("namespace=" + namespace)
+  }
   if (name !== undefined && name !== "") {
     query.push("name=" + name)
   }
@@ -29,12 +44,3 @@ export function getCronJobItemOrList(params) {
   })
 }
 
-export function deleteCronJob(params) {
-  let namespace = params.namespace
-  let name = params.name
-  let url = "/k8s/cronjob/" + namespace + "/" + name
-  return request({
-    url: url,
-    method: "delete",
-  })
-}
