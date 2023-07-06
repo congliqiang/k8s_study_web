@@ -36,7 +36,16 @@
             <el-form-item label="image"
                           label-width="120px"
                           :prop="'containers.'+index+'.image'" :rules="rules.image">
-              <el-input v-model="item.image" placeholder="please input image"></el-input>
+              <el-autocomplete
+                class="inline-input"
+                v-model="item.image"
+                :fetch-suggestions="querySearch"
+                placeholder="请输入内容"
+                style="width: 100%"
+                :trigger-on-focus="false"
+                @select="handleSelect"
+              ></el-autocomplete>
+<!--              <el-input v-model="item.image" placeholder="please input image"></el-input>-->
             </el-form-item>
             <el-form-item
               label-width="120px"
@@ -331,6 +340,7 @@ export default {
     return {
       formValidatePass: false,
       activeNames: [],
+      images: [],
       form: {
         containers: [],
       },
@@ -366,6 +376,27 @@ export default {
     }
   },
   methods: {
+    querySearch(queryString, cb) {
+      this.$store.dispatch("harbor/matchImage", {
+        keyword: queryString
+      }).then(res => {
+        let data = res.data
+        this.images = []
+        for (let i = 0; i < data.length; i++) {
+          this.images.push({
+            value: data[i]
+          })
+        }
+        console.log(this.images)
+        var images = this.images;
+        // var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        // 调用 callback 返回建议列表的数据
+        cb(images);
+      })
+    },
+    handleSelect(item) {
+      console.log(item);
+    },
     handleChange(val) {
       // console.log(val);
     },

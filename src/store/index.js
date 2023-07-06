@@ -16,9 +16,15 @@ import sc from './modules/sc'
 import svc from './modules/svc'
 import ingress from './modules/ingress'
 import ingroute from './modules/ingroute'
+import deployment from './modules/deployment'
+import daemonset from './modules/daemonset'
+import statefulset from './modules/statefulset'
+import job from './modules/job'
+import cronjob from './modules/cronjob'
 import sa from './modules/sa'
 import role from './modules/role'
 import rb from './modules/rb'
+import harbor from './modules/harbor'
 
 Vue.use(Vuex)
 
@@ -41,7 +47,13 @@ const store = new Vuex.Store({
     ingroute,
     sa,
     role,
-    rb
+    rb,
+    deployment,
+    daemonset,
+    statefulset,
+    job,
+    cronjob,
+    harbor
   },
   getters
 })

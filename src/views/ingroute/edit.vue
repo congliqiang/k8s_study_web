@@ -130,6 +130,9 @@ export default {
         namespace: "",
         labels: [],
         routes: [],
+        tls: {
+          secretName: ""
+        }
       },
       middlewareList: [],
       rules: {
@@ -137,9 +140,7 @@ export default {
           {required: true, message: 'please input name', trigger: 'blur'}
         ]
       },
-      tls: {
-        secretName: ""
-      }
+
     }
   },
   created() {
